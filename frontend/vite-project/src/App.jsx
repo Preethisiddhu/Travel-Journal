@@ -1,21 +1,19 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import SignupPage from './pages/SignupPage';
-import LoginPage from './pages/LoginPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
-import AddStoryPage from './pages/AddStoryPage';
+import MyStories from './pages/MyStories';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
+    <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/add" element={<AddStoryPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/mystories" element={<MyStories />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

@@ -1,25 +1,20 @@
-
-
 import jwt from 'jsonwebtoken';
 
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    console.log('No token provided or wrong format');
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  const token = authHeader.split(' ')[1];
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Token verified, decoded payload:', decoded);
-    req.user = { id: decoded.id }; // or whatever you store in token
-    next();
-  } catch (err) {
-    console.log('Token verification failed:', err.message);
-    return res.status(401).json({ message: 'Invalid token' });
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+
+    const token = authHeader.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'No token provided' });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) return res.status(403).json({ message: 'Invalid token' });
+
+      req.user = user; // user object from token payload (should have id)
+      next();
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error in auth middleware' });
   }
 };
-
